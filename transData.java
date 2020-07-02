@@ -162,7 +162,7 @@ public class transData implements Serializable{
     public String get_register_secret_question(){
         return this.secret_question;
     }
-    public void set_register_name_pass(String register_name, String register_pass, String secret_question){
+    public void set_register_name_pass_question(String register_name, String register_pass, String secret_question){
         this.register_name = register_name;
         this.register_pass = register_pass;
         this.secret_question = secret_question;
