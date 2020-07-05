@@ -7,6 +7,8 @@ public class Room_server extends Thread{
 
     private int port_1, port_2, room_num;
 
+//    private String name_1, name_2;
+
     public Room_server(int port_1, int port_2, int room_num){
         this.port_1 = port_1;
         this.port_2 = port_2;
@@ -52,15 +54,22 @@ public class Room_server extends Thread{
 
             int first_turn = 1;// 1 or 2
 
-            boolean battle_end = false;
+            boolean battle_end = true;
 
             if (first_turn==1){
                 // 1 が先手の場合
+                transData start = new transData(1000);
+                os_1.writeObject(start);
+                System.out.println("send --start-- to player1");
+
                 while(battle_end){
                     transData data_1 =(transData)ois_1.readObject();
+                    System.out.println("read Object");
+                    System.out.println(data_1.get_protocol());
                     if(data_1 instanceof transData) {
                         if (data_1.get_protocol()==3){
                             os_2.writeObject(data_1);
+                            System.out.println("send Object to 2");
                         }else if(data_1.get_protocol()==50){
                             battle_end = data_1.get_battle_end();
 
@@ -68,12 +77,15 @@ public class Room_server extends Thread{
                         }
                     }
 
-                    if (battle_end) break;
+                    if (!battle_end) {break;}
 
+                    //	os_2.writeObject(start);
+                    //System.out.println("send --start-- to player2");
                     transData data_2 =(transData)ois_2.readObject();
                     if(data_2 instanceof transData) {
                         if (data_2.get_protocol()==3){
                             os_1.writeObject(data_2);
+                            System.out.println("send Object to 1");
                         }else if(data_2.get_protocol()==50){
                             battle_end = data_2.get_battle_end();
 
